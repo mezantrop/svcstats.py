@@ -7,7 +7,7 @@ Report IBM SVC/Storwize storage system performance statistics in CLI using SMI-S
 
 ```
 Usage:
-    svcstat.py -n|-v|-m|-d -a address -u user -p password [-f minutes] [-ht]
+    svcstats.py -n|-v|-m|-d -a address -u user -p password [-f minutes] [-ht]
 
 Options:
     -n, -v, -m or -d
