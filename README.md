@@ -1,6 +1,11 @@
 # svcstats.py
 Report IBM SVC/Storwize storage system performance statistics in CLI using SMI-S interface
 
+* Requires Python 3 with 'pywbem' module
+* Before running svcstats.py, enable statistic on SVC/Storwize system:
+```svctask startstats -interval <1-60 minutes>```
+
+
 ```
 Usage:
     svcstat.py -n|-v|-m|-d -a address -u user -p password [-f minutes] [-ht]
@@ -19,9 +24,5 @@ Disable column headers.
     [-t]
 Show report date/time creation timestamp on the storage system
 ```
-Requires Python 3 with 'pywbem' module
-
-Before running svcstats.py, enable statistic on SVC/Storwize system:
-```svctask startstats -interval <1-60 minutes>```
 
 [IBM SVC/Storwize CIM agent documentation](https://www.ibm.com/support/knowledgecenter/STPVGU/com.ibm.storage.svc.console.720.doc/svc_sdkintro_215ebp.html)
