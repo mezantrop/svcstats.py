@@ -19,3 +19,9 @@ Disable column headers.
     [-t]
 Show report date/time creation timestamp on the storage system
 ```
+Requires Python 3 with 'pywbem' module
+
+Before running svcstats.py, enable statistic on SVC/Storwize system:
+```svctask startstats -interval <1-60 minutes>```
+
+[IBM SVC/Storwize CIM agent documentation](https://www.ibm.com/support/knowledgecenter/STPVGU/com.ibm.storage.svc.console.720.doc/svc_sdkintro_215ebp.html)
