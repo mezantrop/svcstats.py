@@ -113,7 +113,7 @@ def usage(err_code=1, err_text=''):
     print('Report IBM SVC/Storwize storage system performance statistics\n'
           '\n'
           'Usage:\n'
-          '\tsvcstat.py -n|-v|-m|-d -a address -u user -p password [-f minutes] [-ht]\n'
+          '\tsvcstats.py -n|-v|-m|-d -a address -u user -p password [-f minutes] [-ht]\n'
           '\n'
           'Options:\n'
           '\t-n, -v, -m or -d\n'
