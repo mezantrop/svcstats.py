@@ -1,6 +1,7 @@
 # svcstats.py
 Report IBM SVC/Storwize storage system performance statistics in CLI using SMI-S interface
 
+```
 Usage:
     svcstat.py -n|-v|-m|-d -a address -u user -p password [-f minutes] [-ht]
 
@@ -17,3 +18,4 @@ Optional report frequency interval. Must not be less then default "StatisticsFre
 Disable column headers.
     [-t]
 Show report date/time creation timestamp on the storage system
+```
