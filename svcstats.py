@@ -4,16 +4,15 @@
 #
 # Requires Python 3 with 'pywbem' module
 #
-# 2017.09.28    v 1.0   Mikhail Zakharov <zmey20000@yahoo.com>
-#
 # Before running svcstats.py, enable statistic on SVC/Storwize system:
 # svctask startstats -interval <1-60 minutes>
-
 #
+# 2017.09.28    v 1.0   Mikhail Zakharov <zmey20000@yahoo.com>
+
 # IBM SVC/Storwize CIM agent documentation:
 # https://www.ibm.com/support/knowledgecenter/STPVGU/com.ibm.storage.svc.console.720.doc/svc_sdkintro_215ebp.html
-#
-# Used CIM Classes descriptions:
+
+# Used CIM Classes:
 # System info - IBMTSSVC_Cluster
 # Performance statistics - IBMTSSVC_NodeStatistics, IBMTSSVC_StorageVolumeStatistics,
 # IBMTSSVC_BackendVolumeStatistics and IBMTSSVC_DiskDriveStatistics
