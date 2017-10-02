@@ -8,6 +8,7 @@
 # svctask startstats -interval <1-60 minutes>
 #
 # 2017.09.28    v 1.0   Mikhail Zakharov <zmey20000@yahoo.com>
+# 2017.10.02    v 1.0.1 Mikhail Zakharov <zmey20000@yahoo.com>  Volume output statistics fix
 
 # IBM SVC/Storwize CIM agent documentation:
 # https://www.ibm.com/support/knowledgecenter/STPVGU/com.ibm.storage.svc.console.720.doc/svc_sdkintro_215ebp.html
@@ -63,7 +64,7 @@ headers = {
     'IBMTSSVC_StorageVolumeStatistics': {
         'request': [
             'StatisticTime', 'InstanceID', 'KBytesRead', 'KBytesWritten', 'KBytesTransferred', 'ReadIOs', 'WriteIOs',
-            'TotalIOs', 'ReadHitIOs', 'WriteHitIOs', 'ReadIOTimeCounter', 'WriteIOTimeCounter', 'IOTimeCounter'
+            'TotalIOs', 'ReadIOTimeCounter', 'WriteIOTimeCounter', 'IOTimeCounter', 'ReadHitIOs', 'WriteHitIOs'
         ],
         'result': [
             'Time', 'ID', 'rKB/s', 'wKB/s', 'tKB/s', 'rIO/s', 'wIO/s', 'tIO/s', 's/rIO', 's/wIO', 's/tIO',
@@ -105,6 +106,12 @@ nop_error = 'Error! You must specify all mandatory to get data.'
 frequency_warn = 'Warning! Sample frequency is invalid. Using frequency value from the storage system: {}.'
 
 
+# CIM Classes description
+#  System info: IBMTSSVC_Cluster
+# Performance statistics: IBMTSSVC_NodeStatistics, IBMTSSVC_StorageVolumeStatistics,
+# IBMTSSVC_BackendVolumeStatistics and IBMTSSVC_DiskDriveStatistics
+
+
 def usage(err_code=1, err_text=''):
     if err_text:
         print(err_text, '\n', file=sys.stderr)
@@ -112,7 +119,7 @@ def usage(err_code=1, err_text=''):
     print('Report IBM SVC/Storwize storage system performance statistics\n'
           '\n'
           'Usage:\n'
-          '\tsvcstats.py -n|-v|-m|-d -a address -u user -p password [-f minutes] [-ht]\n'
+          '\tsvcstat.py -n|-v|-m|-d -a address -u user -p password [-f minutes] [-ht]\n'
           '\n'
           'Options:\n'
           '\t-n, -v, -m or -d\n'
