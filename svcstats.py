@@ -6,7 +6,7 @@
 #
 # Before running svcstats.py, enable statistic on SVC/Storwize system:
 # svctask startstats -interval <1-60 minutes>
-#
+
 # 2017.09.28    v 1.0   Mikhail Zakharov <zmey20000@yahoo.com>
 # 2017.10.02    v 1.0.1 Mikhail Zakharov <zmey20000@yahoo.com>  Volume output statistics fix
 # 2017.10.03    v 1.0.2 Mikhail Zakharov <zmey20000@yahoo.com>  Typos fixed
