@@ -9,6 +9,7 @@
 #
 # 2017.09.28    v 1.0   Mikhail Zakharov <zmey20000@yahoo.com>
 # 2017.10.02    v 1.0.1 Mikhail Zakharov <zmey20000@yahoo.com>  Volume output statistics fix
+# 2017.10.03    v 1.0.2 Mikhail Zakharov <zmey20000@yahoo.com>  Typos fixed
 
 # IBM SVC/Storwize CIM agent documentation:
 # https://www.ibm.com/support/knowledgecenter/STPVGU/com.ibm.storage.svc.console.720.doc/svc_sdkintro_215ebp.html
@@ -102,7 +103,7 @@ data = {
 }
 
 # Warning/error messages
-nop_error = 'Error! You must specify all mandatory to get data.'
+nop_error = 'Error! You must specify all mandatory options to get data.'
 frequency_warn = 'Warning! Sample frequency is invalid. Using frequency value from the storage system: {}.'
 
 
@@ -125,7 +126,7 @@ def usage(err_code=1, err_text=''):
           '\t-n, -v, -m or -d\n'
           'Show nodes, vdisks, mdisks or drives performance statistics.\n'
           '\t-a address -u user -p password\n'
-          'Valid IP/DNS address, username and passwors to connect with IBM SVC/Storwize storage system\n'
+          'Valid IP/DNS address, username and password to connect with IBM SVC/Storwize storage system\n'
           '\t[-f minutes]\n'
           'Optional report frequency interval. Must not be less then default "StatisticsFrequency" value.\n'
           '\t[-h]\n'
