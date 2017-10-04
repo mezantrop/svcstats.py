@@ -327,20 +327,20 @@ def build_delta(cim_class, stats, sample_frequency):
 
         if current[r][index] == previous[r][index]:         # Subtract matrices if we have previous stats values ...
             for c in range(perf, len(current[0])):
-                row.append((current[r][c] - previous[r][c]) / sample_frequency)
+                row.append(float(current[r][c] - previous[r][c]) / sample_frequency)
         else:                                               # ... or pre-fill the row with current values only
             for c in range(perf, len(current[0])):
-                row.append(current[r][c])
+                row.append(float(current[r][c]))
 
         if cim_class == 'IBMTSSVC_BackendVolumeStatistics' or cim_class == 'IBMTSSVC_StorageVolumeStatistics':
             # Count times
             # s/IO
             if row[8] and row[5]:
-                row[8] = row[8] / row[5]                        # s/rIOtime
+                row[8] = float(row[8]) / float(row[5])                        # s/rIOtime
             if row[9] and row[6]:
-                row[9] = row[9] / row[6]                        # s/wIOtime
+                row[9] = float(row[9]) / float(row[6])                        # s/wIOtime
             if row[10] and row[7]:
-                row[10] = row[10] / row[7]                      # s/tIOtime
+                row[10] = float(row[10]) / float(row[7])                      # s/tIOtime
 
         result.append(row)
     return result
