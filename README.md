@@ -30,5 +30,5 @@ Show report date/time creation timestamp on the storage system
 * Requires keys for SSH authorisation or use SSH wrapper
 ```
 Usage:
- scstat.sh <target> <user>
+ scstat.sh <user> <target>
 ```
