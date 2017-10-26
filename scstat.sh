@@ -9,33 +9,26 @@
 
 # Report IBM SVC/Storwize Cluster-level performance statistics in CSV using SSH
 
-delim=","			# Main delimiter
-fashion="../fashion/fashion"	# fashion SSH wrapper. Useful if you have 
-				# passwords instead of keys for authentication
-lssystemstats="lssystemstats -nohdr -delim $delim"
-header="stat_name,stat_current,stat_peak,stat_peak_time"	# Header names
-interval=1			# Default interval is 1 second
+# 2017.10.04	v1.0	Mikhail Zakharov <zmey20000@yahoo.com>	Initial
+# 2017.10.26	v1.1	Mikhail Zakharov <zmey20000@yahoo.com>	Simplification
+
+
+delim=","					# Delimiter
+interval=1					# Interval
+# Command:
+lsss="while true; do lssystemstats -nohdr -delim $delim; sleep $interval; done"
+# Header:
+header="stat_name"$delim"stat_current$delim"stat_peak$delim"stat_peak_time"
 
 # ----------------------------------------------------------------------------- 
 usage() {
     echo "Usage:"
-    echo " scstat.sh <target> <user> <password> [interval]"
+    echo " scstat.sh <user> <target>"
     exit 1
 }
 
 # ----------------------------------------------------------------------------- 
-[ "$#" -gt 4 ] && usage
-
-target="$1"
-user="$2"
-password="$3"
-[ "$4" ] && interval="$4"
+[ "$#" -ne 2 ] && usage
 
 echo "$header"
-while true
-do
-	# To use pure ssh with keys uncomment the line below and remark fashion
-	#ssh "$user"@"$target""$lssystemstats"
-	$fashion "$target" "$user" "$password" "$lssystemstats" 2>/dev/null
-	sleep $interval
-done
+ssh "$1"@"$2" "$lsss"
