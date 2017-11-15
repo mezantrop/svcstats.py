@@ -1,5 +1,5 @@
 # svcstats.py / scstat.sh
-## svcstats.py - Report IBM SVC/Storwize storage system performance statistics in CLI using SMI-S interface
+## svcstats.py - Report IBM SVC/Storwize storage system performance statistics for nodes, vdisks, mdisks or drives in CLI using SMI-S interface
 
 * Requires Python 3 with 'pywbem' module
 * Before running svcstats.py, enable statistic on SVC/Storwize system: ```svctask startstats -interval <1-60 minutes>```
