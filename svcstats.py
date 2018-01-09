@@ -6,10 +6,10 @@
 #
 # Before running svcstats.py, enable statistic on SVC/Storwize system:
 # svctask startstats -interval <1-60 minutes>
-
-# 2017.09.28    v 1.0   Mikhail Zakharov <zmey20000@yahoo.com>
-# 2017.10.02    v 1.0.1 Mikhail Zakharov <zmey20000@yahoo.com>  Volume output statistics fix
-# 2017.10.03    v 1.0.2 Mikhail Zakharov <zmey20000@yahoo.com>  Typos fixed
+#
+# 2017.09.28    v 1.0       Mikhail Zakharov <zmey20000@yahoo.com>
+# 2017.10.02    v 1.0.1     Mikhail Zakharov <zmey20000@yahoo.com>  Volume output statistics fix
+# 2018.01.09    v 1.0.1.1   Mikhail Zakharov <zmey20000@yahoo.com>  Code cleaning
 
 # IBM SVC/Storwize CIM agent documentation:
 # https://www.ibm.com/support/knowledgecenter/STPVGU/com.ibm.storage.svc.console.720.doc/svc_sdkintro_215ebp.html
@@ -103,7 +103,7 @@ data = {
 }
 
 # Warning/error messages
-nop_error = 'Error! You must specify all mandatory options to get data.'
+nop_error = 'Error! You must specify all mandatory to get data.'
 frequency_warn = 'Warning! Sample frequency is invalid. Using frequency value from the storage system: {}.'
 
 
@@ -126,7 +126,7 @@ def usage(err_code=1, err_text=''):
           '\t-n, -v, -m or -d\n'
           'Show nodes, vdisks, mdisks or drives performance statistics.\n'
           '\t-a address -u user -p password\n'
-          'Valid IP/DNS address, username and password to connect with IBM SVC/Storwize storage system\n'
+          'Valid IP/DNS address, username and passwors to connect with IBM SVC/Storwize storage system\n'
           '\t[-f minutes]\n'
           'Optional report frequency interval. Must not be less then default "StatisticsFrequency" value.\n'
           '\t[-h]\n'
@@ -159,7 +159,6 @@ def get_cmdopts():
     user = ''
     password = ''
     frequency = 0                                            # Fetch RefreshInterval from the storage system
-    unit_sz = 'KB'
     skip_header = False
     skip_time = True
 
@@ -228,14 +227,15 @@ def get_system(wbem_connection):
     return result
 
 
-def get_stats(wbem_connection, cim_class, fields=[], inst_list=[], toint=True):
+def get_stats(wbem_connection, cim_class, fields=(), inst_list=(), toint=True):
     """Get performance statistics for the 'cim_class'.
        Optional 'fields' argument specifies columns to retrieve, defaults are taken from headers[cim_class].
        Optional argument 'inst_list' is a filter to select desired instances."""
 
-    if not fields:
+    flds = list(fields)
+    if not flds:
         # Use default fields
-        fields = headers[cim_class]['request']                              # Fields to request
+        flds = headers[cim_class]['request']                              # Fields to request
 
     inst_filter = ''
     if inst_list:
@@ -251,7 +251,7 @@ def get_stats(wbem_connection, cim_class, fields=[], inst_list=[], toint=True):
                       inst_filter_var.join(str(inst) for inst in inst_list) + "'"
 
     # Form "select" request string
-    request = "SELECT " + ','.join(fields) + " FROM " + cim_class + "{WHERE}".format(WHERE=inst_filter)
+    request = "SELECT " + ','.join(flds) + " FROM " + cim_class + "{WHERE}".format(WHERE=inst_filter)
 
     # header will be the first member in the result
     result = [headers[cim_class]['result']]                                # Fields to be in the report header
@@ -276,7 +276,7 @@ def get_stats(wbem_connection, cim_class, fields=[], inst_list=[], toint=True):
             ]
 
         # Collect all the rest of the fields in a loop
-        for fld in fields:
+        for fld in flds:
             if fld != 'InstanceID' and fld != 'StatisticTime':
                 if cim_class == 'IBMTSSVC_FCPortStatistics' and fld == 'ElementName':
                     ports2nodes = stat.properties[fld].value.split()
@@ -327,20 +327,20 @@ def build_delta(cim_class, stats, sample_frequency):
 
         if current[r][index] == previous[r][index]:         # Subtract matrices if we have previous stats values ...
             for c in range(perf, len(current[0])):
-                row.append(float(current[r][c] - previous[r][c]) / sample_frequency)
+                row.append((current[r][c] - previous[r][c]) / sample_frequency)
         else:                                               # ... or pre-fill the row with current values only
             for c in range(perf, len(current[0])):
-                row.append(float(current[r][c]))
+                row.append(current[r][c])
 
         if cim_class == 'IBMTSSVC_BackendVolumeStatistics' or cim_class == 'IBMTSSVC_StorageVolumeStatistics':
             # Count times
             # s/IO
             if row[8] and row[5]:
-                row[8] = float(row[8]) / float(row[5])                        # s/rIOtime
+                row[8] = row[8] / row[5]                        # s/rIOtime
             if row[9] and row[6]:
-                row[9] = float(row[9]) / float(row[6])                        # s/wIOtime
+                row[9] = row[9] / row[6]                        # s/wIOtime
             if row[10] and row[7]:
-                row[10] = float(row[10]) / float(row[7])                      # s/tIOtime
+                row[10] = row[10] / row[7]                      # s/tIOtime
 
         result.append(row)
     return result
@@ -388,7 +388,7 @@ if not data['IBMTSSVC_Cluster']['current'][1][8]:
     exit_prog(0, 'Statistics is turned off on the storage system.\n'
                  'Enable it first: "svctask startstats -interval <1-60 minutes>"')
 
-if params['frequency'] < data['IBMTSSVC_Cluster']['current'][1][7] * 60 or params['frequency'] > 3600:
+if int(params['frequency']) < data['IBMTSSVC_Cluster']['current'][1][7] * 60 or int(params['frequency']) > 3600:
     # 60 minutes <= frequency >= 'Statistics Interval' value on the storage system
     params['frequency'] = data['IBMTSSVC_Cluster']['current'][1][7] * 60
     print(frequency_warn.format(data['IBMTSSVC_Cluster']['current'][1][7]), file=sys.stderr)
@@ -404,6 +404,8 @@ while True:
         data[params['cim_class']]['delta'] = delta
         data[params['cim_class']]['previous'] = data[params['cim_class']]['current']
 
-    print_stats(data[params['cim_class']]['delta'], skip_header=params['skip_header'], skip_time=params['skip_time'])
+    print_stats(
+        data[params['cim_class']]['delta'], skip_header=bool(params['skip_header']), skip_time=bool(params['skip_time'])
+    )
 
     time.sleep(params['frequency'])
