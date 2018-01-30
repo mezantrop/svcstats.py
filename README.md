@@ -1,8 +1,27 @@
 # svcstats.py / scstat.sh
 ## svcstats.py - Report IBM SVC/Storwize storage system performance statistics for nodes, vdisks, mdisks or drives in CLI using SMI-S interface
 
+## Installation
+
+Download all files, then run:
+```python3 setup.py install```
+
+### Virual environment installation
+In order not to modify system python3 environment, you may consider virtual environment.
+```
+mkdir svcstat
+cd svcstat
+python3 -m venv venv
+source venv/bin/activate
+\# Copy all svcstats.py files here
+(venv) python3 setup.py install
+```
+
+If you have installed **svcstats.py** into a virtual environment, do not forget to activate it with "source /path/to/venv/bin/activate" command, for each session you are running **svcstats.py**.
+
+
 * Requires Python 3 with 'pywbem' module
-* Before running svcstats.py, enable statistic on SVC/Storwize system: ```svctask startstats -interval <1-60 minutes>```
+* Before running **svcstats.py**, enable statistic on SVC/Storwize system: ```svctask startstats -interval <1-60 minutes>```
 
 
 ```
