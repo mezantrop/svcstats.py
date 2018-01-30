@@ -13,7 +13,7 @@ mkdir svcstat
 cd svcstat
 python3 -m venv venv
 source venv/bin/activate
-\# Copy all svcstats.py files here
+# Copy all svcstats.py files here
 (venv) python3 setup.py install
 ```
 
