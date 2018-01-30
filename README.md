@@ -9,11 +9,11 @@ Download all files, then run:
 ### Virual environment installation
 In order not to modify system python3 environment, you may consider virtual environment.
 ```
-mkdir svcstat
-cd svcstat
+mkdir svcstats
+cd svcstats
+# Copy all svcstats.py files into svcstats directory
 python3 -m venv venv
 source venv/bin/activate
-# Copy all svcstats.py files here
 (venv) python3 setup.py install
 ```
 
