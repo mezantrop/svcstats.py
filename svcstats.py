@@ -371,7 +371,7 @@ def print_stats(stats, skip_header=False, skip_time=True):
         for fld in ln[2:]:
             r_line += '{0:16.2f}'.format(fld)
 
-        print(r_line)
+        print(r_line, flush=True)
 
 
 # Main goes below
