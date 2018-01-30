@@ -10,6 +10,7 @@
 # 2017.09.28    v 1.0       Mikhail Zakharov <zmey20000@yahoo.com>
 # 2017.10.02    v 1.0.1     Mikhail Zakharov <zmey20000@yahoo.com>  Volume output statistics fix
 # 2018.01.09    v 1.0.1.1   Mikhail Zakharov <zmey20000@yahoo.com>  Code cleaning
+# 2018.01.30    v 1.0.1.2   Mikhail Zakharov <zmey20000@yahoo.com>  setup.py
 
 # IBM SVC/Storwize CIM agent documentation:
 # https://www.ibm.com/support/knowledgecenter/STPVGU/com.ibm.storage.svc.console.720.doc/svc_sdkintro_215ebp.html
