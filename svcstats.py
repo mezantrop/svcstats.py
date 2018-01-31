@@ -1,4 +1,4 @@
-#!/usr/bin/python3
+#!/usr/bin/env python3
 #
 # Report IBM SVC/Storwize storage system performance statistics in CLI using SMI-S interface
 #
@@ -10,7 +10,7 @@
 # 2017.09.28    v 1.0       Mikhail Zakharov <zmey20000@yahoo.com>
 # 2017.10.02    v 1.0.1     Mikhail Zakharov <zmey20000@yahoo.com>  Volume output statistics fix
 # 2018.01.09    v 1.0.1.1   Mikhail Zakharov <zmey20000@yahoo.com>  Code cleaning
-# 2018.01.30    v 1.0.1.2   Mikhail Zakharov <zmey20000@yahoo.com>  setup.py
+# 2018.01.31    v 1.0.2.0   Mikhail Zakharov <zmey20000@yahoo.com>  Output format enhancements
 
 # IBM SVC/Storwize CIM agent documentation:
 # https://www.ibm.com/support/knowledgecenter/STPVGU/com.ibm.storage.svc.console.720.doc/svc_sdkintro_215ebp.html
@@ -104,7 +104,7 @@ data = {
 }
 
 # Warning/error messages
-nop_error = 'Error! You must specify all mandatory to get data.'
+nop_error = 'Error! You must specify all mandatory options to get data.'
 frequency_warn = 'Warning! Sample frequency is invalid. Using frequency value from the storage system: {}.'
 
 
@@ -228,6 +228,11 @@ def get_system(wbem_connection):
     return result
 
 
+def datetime(dtstr):
+    """Convert datetime into human readable form"""
+    return time.strftime('%Y-%m-%d %H:%M:%S', time.strptime(dtstr, '%Y%m%d%H%M%S'))
+
+
 def get_stats(wbem_connection, cim_class, fields=(), inst_list=(), toint=True):
     """Get performance statistics for the 'cim_class'.
        Optional 'fields' argument specifies columns to retrieve, defaults are taken from headers[cim_class].
@@ -266,14 +271,14 @@ def get_stats(wbem_connection, cim_class, fields=(), inst_list=(), toint=True):
         # Handle 'InstanceID' and 'StatisticTime'
         if cim_class != 'IBMTSSVC_FCPortStatistics':
             ln = [
-                str(stat.properties['StatisticTime'].value).split('.')[0],  # 'StatisticTime'
-                int(stat.properties['InstanceID'].value.split()[1])         # 'InstanceID'
+                datetime(str(stat.properties['StatisticTime'].value).split('.')[0]),    # 'StatisticTime'
+                int(stat.properties['InstanceID'].value.split()[1])                     # 'InstanceID'
             ]
         else:
             # FCPortStatistics is different to everything else
             ln = [
-                str(stat.properties['StatisticTime'].value).split('.')[0],  # 'StatisticTime'
-                str(stat.properties['InstanceID'].value.split()[1])         # 'InstanceID'
+                datetime(str(stat.properties['StatisticTime'].value).split('.')[0]),    # 'StatisticTime'
+                str(stat.properties['InstanceID'].value.split()[1])                     # 'InstanceID'
             ]
 
         # Collect all the rest of the fields in a loop
@@ -320,7 +325,6 @@ def build_delta(cim_class, stats, sample_frequency):
         row = [
             current[r][date],                               # Date/time
             current[r][index],                              # Index aka ID aka Instance ID
-
         ]
 
         if current[r][date] == previous[r][date]:           # We are still in the same time interval!
@@ -328,20 +332,18 @@ def build_delta(cim_class, stats, sample_frequency):
 
         if current[r][index] == previous[r][index]:         # Subtract matrices if we have previous stats values ...
             for c in range(perf, len(current[0])):
-                row.append((current[r][c] - previous[r][c]) / sample_frequency)
+                row.append(round(float(current[r][c] - previous[r][c]) / sample_frequency, 2))
         else:                                               # ... or pre-fill the row with current values only
             for c in range(perf, len(current[0])):
                 row.append(current[r][c])
 
         if cim_class == 'IBMTSSVC_BackendVolumeStatistics' or cim_class == 'IBMTSSVC_StorageVolumeStatistics':
-            # Count times
-            # s/IO
             if row[8] and row[5]:
-                row[8] = row[8] / row[5]                        # s/rIOtime
+                row[8] = round(float(row[8] / row[5]), 2)                        # s/rIOtime
             if row[9] and row[6]:
-                row[9] = row[9] / row[6]                        # s/wIOtime
+                row[9] = round(float(row[9] / row[6]), 2)                        # s/wIOtime
             if row[10] and row[7]:
-                row[10] = row[10] / row[7]                      # s/tIOtime
+                row[10] = round(float(row[10] / row[7]), 2)                      # s/tIOtime
 
         result.append(row)
     return result
@@ -354,7 +356,7 @@ def print_stats(stats, skip_header=False, skip_time=True):
     if not skip_header:
         r_header = ''
         if not skip_time:
-            r_header = '{0:>14s}'.format(stats[0][0])               # Date/Time
+            r_header = '{0:>19s}'.format(stats[0][0])               # Date/Time
         r_header += '{0:>6s}'.format(stats[0][1])                   # InstanceID
         for fld in stats[0][2:]:                                    # Add all the rest of the fields to the header
             r_header += '{0:>16s}'.format(fld)
@@ -364,7 +366,7 @@ def print_stats(stats, skip_header=False, skip_time=True):
     for ln in stats[1:]:
         r_line = ''
         if not skip_time:
-            r_line = '{0:14s}'.format(ln[0])                        # Date/Time
+            r_line = '{0:19s}'.format(ln[0])                        # Date/Time
         r_line += '{0:6d}'.format(ln[1])                            # InstanceID
 
         # run through the rest of the fields:
