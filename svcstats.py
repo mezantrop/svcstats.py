@@ -146,6 +146,7 @@ def exit_prog(err_code=1, err_text=''):
 
 
 def get_cmdopts():
+    opts = ''
     try:
         opts, args = getopt.getopt(sys.argv[1:], 'nvmda:u:p:f:ht')
     except getopt.GetoptError as err:
