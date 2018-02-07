@@ -410,8 +410,9 @@ while True:
         data[params['cim_class']]['delta'] = delta
         data[params['cim_class']]['previous'] = data[params['cim_class']]['current']
 
-    print_stats(
-        data[params['cim_class']]['delta'], skip_header=bool(params['skip_header']), skip_time=bool(params['skip_time'])
-    )
+        print_stats(
+            data[params['cim_class']]['delta'], skip_header=bool(params['skip_header']),
+            skip_time=bool(params['skip_time'])
+        )
 
     time.sleep(params['frequency'])
