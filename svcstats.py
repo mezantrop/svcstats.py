@@ -11,6 +11,7 @@
 # 2017.10.02    v 1.0.1     Mikhail Zakharov <zmey20000@yahoo.com>  Volume output statistics fix
 # 2018.01.09    v 1.0.1.1   Mikhail Zakharov <zmey20000@yahoo.com>  Code cleaning
 # 2018.01.31    v 1.0.2.0   Mikhail Zakharov <zmey20000@yahoo.com>  Output format enhancements
+# 2018.02.07    v 1.0.2.1   Mikhail Zakharov <zmey20000@yahoo.com>  Minor fixes and code decorations
 
 # IBM SVC/Storwize CIM agent documentation:
 # https://www.ibm.com/support/knowledgecenter/STPVGU/com.ibm.storage.svc.console.720.doc/svc_sdkintro_215ebp.html
@@ -49,7 +50,7 @@ headers = {
             'StatisticTime', 'InstanceID', 'KBytesRead', 'KBytesWritten', 'KBytesTransferred', 'ReadIOs', 'WriteIOs',
             'TotalIOs', 'ReadIOTimeCounter',  'WriteIOTimeCounter', 'IOTimeCounter'
         ],
-        'result': ['Time', 'ID', 'rKB/s', 'wKB/s', 'tKB/s', 'rIO/s', 'wIO/s', 'tIO/s', 's/rIO', 's/wIO', 's/tIO']
+        'result': ['Time', 'ID', 'rKB/s', 'wKB/s', 'tKB/s', 'rIO/s', 'wIO/s', 'tIO/s', 'ms/rIO', 'ms/wIO', 'ms/tIO']
     },
     'IBMTSSVC_DiskDriveStatistics': {
         # Suppose to be internal drives. General info only for now as I do not have internal drives to test.
@@ -69,7 +70,7 @@ headers = {
             'TotalIOs', 'ReadIOTimeCounter', 'WriteIOTimeCounter', 'IOTimeCounter', 'ReadHitIOs', 'WriteHitIOs'
         ],
         'result': [
-            'Time', 'ID', 'rKB/s', 'wKB/s', 'tKB/s', 'rIO/s', 'wIO/s', 'tIO/s', 's/rIO', 's/wIO', 's/tIO',
+            'Time', 'ID', 'rKB/s', 'wKB/s', 'tKB/s', 'rIO/s', 'wIO/s', 'tIO/s', 'ms/rIO', 'ms/wIO', 'ms/tIO',
             'rHitIO/s', 'wHitIO/s'
         ]
     }
@@ -121,17 +122,17 @@ def usage(err_code=1, err_text=''):
     print('Report IBM SVC/Storwize storage system performance statistics\n'
           '\n'
           'Usage:\n'
-          '\tsvcstat.py -n|-v|-m|-d -a address -u user -p password [-f minutes] [-ht]\n'
+          '\tsvcstats.py -n|-v|-m|-d -a address -u user -p password [-f minutes] [-ht]\n'
           '\n'
           'Options:\n'
           '\t-n, -v, -m or -d\n'
-          'Show nodes, vdisks, mdisks or drives performance statistics.\n'
+          'Show nodes, vdisks, mdisks or drives performance statistics\n'
           '\t-a address -u user -p password\n'
           'Valid IP/DNS address, username and passwors to connect with IBM SVC/Storwize storage system\n'
           '\t[-f minutes]\n'
-          'Optional report frequency interval. Must not be less then default "StatisticsFrequency" value.\n'
+          'Optional report frequency interval. Must not be less then default "StatisticsFrequency" value\n'
           '\t[-h]\n'
-          'Disable column headers.\n'
+          'Disable column headers\n'
           '\t[-t]\n'
           'Show report date/time creation timestamp on the storage system\n'
           )
@@ -339,12 +340,13 @@ def build_delta(cim_class, stats, sample_frequency):
                 row.append(current[r][c])
 
         if cim_class == 'IBMTSSVC_BackendVolumeStatistics' or cim_class == 'IBMTSSVC_StorageVolumeStatistics':
+            # Response times calculation
             if row[8] and row[5]:
-                row[8] = round(float(row[8] / row[5]), 2)                        # s/rIOtime
+                row[8] = round(float(row[8] / row[5]), 2)                       # ms/rIO
             if row[9] and row[6]:
-                row[9] = round(float(row[9] / row[6]), 2)                        # s/wIOtime
+                row[9] = round(float(row[9] / row[6]), 2)                       # ms/wIO
             if row[10] and row[7]:
-                row[10] = round(float(row[10] / row[7]), 2)                      # s/tIOtime
+                row[10] = round(float(row[10] / row[7]), 2)                     # ms/tIO
 
         result.append(row)
     return result
