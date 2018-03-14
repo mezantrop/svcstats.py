@@ -8,7 +8,8 @@
 # -----------------------------------------------------------------------------
 
 #
-# Feed RRD database with IBM SVC/Storwize Controller level stats and create some graphics on HTML page
+# An example script to feed RRD database with IBM SVC/Storwize Controller level statistics
+# and create some simple HTML report
 #
 
 # 2018.03.14    v 1.0.0   Mikhail Zakharov <zmey20000@yahoo.com>	Initial release
