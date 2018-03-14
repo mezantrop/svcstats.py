@@ -51,3 +51,27 @@ Show report date/time creation timestamp on the storage system
 Usage:
  scstat.sh <user> <target>
 ```
+
+## scstat_ssh.py - Report IBM SVC/Storwize Cluster-level performance statistics using SSH
+It is similar to scstat_https.py
+
+Requires:
+* Python 3 
+* paramiko module
+
+```
+Usage:
+	scstat_ssh.py -a address -u user -p password [-f seconds][-s count][-o stat|csv][-z]
+
+Options:
+	-a address -u user -p password
+Valid IP/DNS address, username and password to connect with IBM SVC/Storwize storage system
+	[-f seconds]
+Report frequency interval: 1 to 60 seconds. Default is 5
+	[-s count]
+Stop statistic collection after "count" times and exit
+	[-o stat|csv]
+Output format style. Default is "stat"
+	[-z]
+Show lines with zero values
+```
