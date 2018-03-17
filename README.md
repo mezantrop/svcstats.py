@@ -45,7 +45,7 @@ Show report date/time creation timestamp on the storage system
 
 [IBM SVC/Storwize CIM agent documentation](https://www.ibm.com/support/knowledgecenter/STPVGU/com.ibm.storage.svc.console.720.doc/svc_sdkintro_215ebp.html)
 
-## scstat.sh - Report IBM SVC/Storwize Cluster-level performance statistics using SSH
+## scstat.sh - Report IBM SVC/Storwize Cluster-level performance statistics using SSH (light version)
 * Requires keys for SSH authorisation or use SSH wrapper
 ```
 Usage:
@@ -53,7 +53,6 @@ Usage:
 ```
 
 ## scstat_ssh.py - Report IBM SVC/Storwize Cluster-level performance statistics using SSH
-It is similar to scstat_https.py
 
 Requires:
 * Python 3 
