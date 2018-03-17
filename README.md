@@ -1,4 +1,4 @@
-# svcstats.py / scstat.sh
+# svcstats.py
 ## svcstats.py - Report IBM SVC/Storwize storage system performance statistics for nodes, vdisks, mdisks or drives in CLI using SMI-S interface
 
 ## Installation
