@@ -74,3 +74,6 @@ Show lines with zero values
 Usage:
  scstat.sh <user> <target>
 ```
+
+## 2rrd/2rrd_scstat-controller.sh
+An example script to feed RRD database with IBM SVC/Storwize Controller level statistics and create a simple HTML report
