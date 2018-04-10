@@ -6,7 +6,7 @@
 Download all files, then run:
 ```python3 setup.py install```
 
-### Virual environment installation
+### Virtual environment installation
 In order not to modify system python3 environment, you may consider virtual environment.
 ```
 mkdir svcstats
