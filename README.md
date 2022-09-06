@@ -1,5 +1,8 @@
-# Warning! This project has been migrated to GitLab with the same name.
+# Warning! This project has been migrated to GitLab with the same name
 # svcstats.py
+
+<a href="https://www.buymeacoffee.com/mezantrop" target="_blank"><img src="https://cdn.buymeacoffee.com/buttons/default-orange.png" alt="Buy Me A Coffee" height="41" width="174"></a>
+
 ## svcstats.py - Report IBM SVC/Storwize storage system performance statistics for nodes, vdisks, mdisks or drives in CLI using SMI-S interface
 
 ## Installation
